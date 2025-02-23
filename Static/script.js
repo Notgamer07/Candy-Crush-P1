@@ -1,55 +1,59 @@
-document.addEventListener("DOMContentLoaded", function () {
-    fetchQuestion();
-});
-
-// Function to fetch a random question
-async function fetchQuestion() {
+document.getElementById('startButton').addEventListener('click', async function() {
     try {
-        const response = await fetch('/api/quiz');
-        const data = await response.json();
+        let response = await fetch('/api/quiz');
+        let data = await response.json();
 
-        if (!data.question) {
-            document.getElementById('question').innerText = "No questions available.";
+        if (!data || data.length === 0) {
+            document.getElementById('questionText').innerText = "No questions available.";
             return;
         }
 
-        document.getElementById('question').innerText = data.question;
-        const optionsContainer = document.getElementById('options');
-        optionsContainer.innerHTML = '';
-
-        data.options.forEach(option => {
-            const button = document.createElement('button');
-            button.classList.add('btn', 'btn-primary', 'm-2');
-            button.innerText = option;
-            button.onclick = () => checkAnswer(option, data.correct_answer);
-            optionsContainer.appendChild(button);
-        });
-
-        document.getElementById('message').innerText = "";
+        document.getElementById('quizContainer').style.display = 'block';
+        loadQuestion(data, 0);
     } catch (error) {
-        console.error('Error fetching question:', error);
-        document.getElementById('question').innerText = "Error loading question.";
+        console.error("Error fetching quiz data:", error);
     }
+});
+
+function loadQuestion(questions, index) {
+    if (index >= questions.length) {
+        document.getElementById('questionText').innerText = "End of Quiz!";
+        return;
+    }
+
+    let question = questions[index];
+    document.getElementById('questionText').innerText = question.question;
+
+    let optionsList = document.getElementById('optionsList');
+    optionsList.innerHTML = "";
+
+    question.options.forEach(option => {
+        let li = document.createElement('li');
+        li.innerText = option;
+        li.onclick = () => checkAnswer(question.id, option, questions, index);
+        optionsList.appendChild(li);
+    });
+
+    document.getElementById('skipButton').onclick = () => loadQuestion(questions, index + 1);
 }
 
-// Function to check the answer
-async function checkAnswer(selectedOption, correctAnswer) {
+async function checkAnswer(questionId, selectedOption, questions, index) {
     try {
-        const response = await fetch('/api/check_answer', {
+        let response = await fetch('/api/check_answer', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ selected_option: selectedOption, correct_answer: correctAnswer })
+            body: JSON.stringify({ question_id: questionId, selected_option: selectedOption })
         });
 
-        const data = await response.json();
-        document.getElementById('message').innerText = data.result;
-    } catch (error) {
-        console.error('Error checking answer:', error);
-        document.getElementById('message').innerText = "Error checking answer.";
-    }
-}
+        let result = await response.json();
+        if (result.correct) {
+            alert("Correct!");
+        } else {
+            alert("Incorrect!");
+        }
 
-// Function to skip the question
-function skipQuestion() {
-    fetchQuestion();
+        loadQuestion(questions, index + 1);
+    } catch (error) {
+        console.error("Error checking answer:", error);
+    }
 }

@@ -1,0 +1,52 @@
+[
+    {
+        "question": "In the grand courtroom drama of India, who holds the gavel as the Chief Justice?",
+        "options": ["The Prime Minister", "The President", "The Chief Justice of India", "The Speaker of the Lok Sabha"],
+        "correct_answer": "The Chief Justice of India"
+    },
+    {
+        "question": "Which ancient Indian text serves as a legal compass, guiding the laws of the land?",
+        "options": ["The Vedas", "The Manusmriti", "The Ramayana", "The Mahabharata"],
+        "correct_answer": "The Manusmriti"
+    },
+    {
+        "question": "In the legal tug-of-war, which court stands tall as the highest judicial authority in India?",
+        "options": ["High Court", "District Court", "Supreme Court", "Family Court"],
+        "correct_answer": "Supreme Court"
+    },
+    {
+        "question": "When two states bicker like siblings over water, which entity steps in to resolve the dispute?",
+        "options": ["The President", "The Parliament", "The Supreme Court", "The Prime Minister"],
+        "correct_answer": "The Supreme Court"
+    },
+    {
+        "question": "Which legal document is the ultimate rulebook, the 'Constitution' of India's laws?",
+        "options": ["The Indian Penal Code", "The Constitution of India", "The Civil Procedure Code", "The Criminal Procedure Code"],
+        "correct_answer": "The Constitution of India"
+    },
+    {
+        "question": "In the courtroom of Indian mythology, who is often depicted as the divine judge?",
+        "options": ["Lord Krishna", "Lord Rama", "Lord Yama", "Lord Indra"],
+        "correct_answer": "Lord Yama"
+    },
+    {
+        "question": "Which act, passed in 1872, serves as the foundation for contracts and agreements in India?",
+        "options": ["The Indian Evidence Act", "The Indian Contract Act", "The Transfer of Property Act", "The Negotiable Instruments Act"],
+        "correct_answer": "The Indian Contract Act"
+    },
+    {
+        "question": "In the legal lexicon of India, what does 'Habeas Corpus' translate to?",
+        "options": ["Produce the body", "You may have the body", "To have a body", "Body of evidence"],
+        "correct_answer": "You may have the body"
+    },
+    {
+        "question": "Which landmark case established the 'Basic Structure' doctrine of the Indian Constitution?",
+        "options": ["Golak Nath Case", "Kesavananda Bharati Case", "Maneka Gandhi Case", "Shah Bano Case"],
+        "correct_answer": "Kesavananda Bharati Case"
+    },
+    {
+        "question": "In the Indian judiciary, what color robes do Supreme Court judges don during court proceedings?",
+        "options": ["Black", "White", "Red", "Green"],
+        "correct_answer": "Black"
+    }
+]

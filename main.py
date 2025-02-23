@@ -1,12 +1,12 @@
 from flask import Flask, render_template, jsonify, request
-import os
 import json
+import random 
+import os
 
 app = Flask(__name__, static_folder="static", template_folder="template")
 
-# Get absolute path for questions.json
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-QUESTIONS_PATH = os.path.join(BASE_DIR, "database", "questions.json")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # Get the directory of main.py
+QUESTIONS_PATH = os.path.join(BASE_DIR, "questions.json")
 
 @app.route('/')
 def index():
@@ -14,7 +14,7 @@ def index():
 
 @app.route('/game')
 def game():
-    return render_template('game.html')  # Ensure game.html is in the templates folder
+    return render_template('game.html') 
 
 @app.route('/quiz')
 def quiz():
@@ -25,29 +25,27 @@ def get_quiz():
     try:
         with open(QUESTIONS_PATH, 'r', encoding='utf-8') as file:
             questions = json.load(file)
-        return jsonify(questions)
+        if not questions:
+            return jsonify({"error": "No questions available."})
+        return jsonify(random.choice(questions))  # Return only one question
     except Exception as e:
         return jsonify({"error": "Could not load questions", "details": str(e)}), 500
 
 @app.route('/api/check_answer', methods=['POST'])
 def check_answer():
     data = request.json
-    question_id = data.get('question_id')
     selected_option = data.get('selected_option')
+    correct_answer = data.get('correct_answer')
 
-    try:
-        with open(QUESTIONS_PATH, 'r', encoding='utf-8') as file:
-            questions = json.load(file)
+    if not selected_option or not correct_answer:
+        return jsonify({"error": "Missing data"}), 400
 
-        correct_answer = next((q["correct_answer"] for q in questions if q["id"] == question_id), None)
+    if selected_option == correct_answer:
+        result_text = "✅ Correct!"
+    else:
+        result_text = f"❌ Wrong! The correct answer was: {correct_answer}"
 
-        if correct_answer is None:
-            return jsonify({"error": "Invalid question ID"}), 400
-
-        return jsonify({"correct": selected_option == correct_answer})
-    
-    except Exception as e:
-        return jsonify({"error": "Could not check answer", "details": str(e)}), 500
+    return jsonify({"result": result_text})
 
 if __name__ == '__main__':
     app.run(debug=True)

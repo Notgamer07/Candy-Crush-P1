@@ -37,23 +37,24 @@ function loadQuestion(questions, index) {
     document.getElementById('skipButton').onclick = () => loadQuestion(questions, index + 1);
 }
 
-async function checkAnswer(questionId, selectedOption, questions, index) {
+async function checkAnswer(selectedOption, correctAnswer) {
     try {
-        let response = await fetch('/api/check_answer', {
+        const response = await fetch('/api/check_answer', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ question_id: questionId, selected_option: selectedOption })
+            body: JSON.stringify({ selected_option: selectedOption, correct_answer: correctAnswer })
         });
 
-        let result = await response.json();
-        if (result.correct) {
-            alert("Correct!");
-        } else {
-            alert("Incorrect!");
-        }
+        const data = await response.json();
 
-        loadQuestion(questions, index + 1);
+        if (data.result) {
+            document.getElementById('message').innerText = data.result;
+        } else {
+            document.getElementById('message').innerText = "Error: No response received.";
+        }
     } catch (error) {
         console.error("Error checking answer:", error);
+        document.getElementById('message').innerText = "Error checking answer.";
     }
 }
+

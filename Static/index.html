@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Legal Study Hub</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            background: url('backweb.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Legal Study Hub</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" href="#quiz">Quiz</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#games">Fun Games</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mt-4">
+        <h1>Welcome to Legal Study Hub</h1>
+        <p>Learn about law with interactive quizzes and fun games.</p>
+
+        <!-- Quiz Section -->
+        <section id="quiz">
+            <h2>Legal Quiz</h2>
+            <p>Test your legal knowledge!</p>
+            <button class="btn btn-primary" onclick="startQuiz()">Start Quiz</button>
+            <div id="quizContainer"></div>
+        </section>
+
+        <!-- Game Section -->
+        <section id="games" class="mt-5">
+            <h2>Fun Game - Legal Word Search</h2>
+            <p>Enjoy a simple word search game with legal terms.</p>
+            <a href="game.html" class="btn btn-success">Play Now</a>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white text-center py-3 mt-4">
+        <p>&copy; 2025 Legal Study Hub. All rights reserved.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

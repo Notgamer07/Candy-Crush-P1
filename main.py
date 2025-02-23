@@ -1,6 +1,7 @@
 from flask import Flask, render_template, jsonify, request
 import json
 import random
+import os
 
 app = Flask(__name__, static_folder="static", template_folder="template")
 
@@ -18,9 +19,20 @@ def quiz_page():
 @app.route('/api/quiz', methods=['GET'])
 def quiz():
     try:
-        with open('database/questions.json', 'r') as f:
+        # Get the absolute path of questions.json
+        file_path = os.path.abspath("database/questions.json")
+        
+        with open(file_path, 'r', encoding='utf-8') as f:
             questions = json.load(f)
+        print(questions)
+        if not questions:
+            return jsonify({"error": "No questions available."})
+
         question = random.choice(questions)
+        return jsonify(question)
+    
+    except Exception as e:
+        return jsonify({"error": str(e)})
     except (FileNotFoundError, IndexError):
         question = {}
     return jsonify(question)

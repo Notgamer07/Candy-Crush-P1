@@ -13,21 +13,69 @@
             background-size: cover;
             color: white;
         }
+        .navbar {
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+        }
+        .navbar-brand img {
+            height: 40px;
+            margin-right: 10px;
+        }
+        .box-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+            margin-top: 30px;
+        }
+        .box {
+            width: 250px;
+            height: 70px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            font-weight: bold;
+            border-radius: 5px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        .box:nth-child(1) { background: rgb(2, 2, 94); }
+        .box:nth-child(2) { background: rgb(1, 78, 1); }
+        .box:nth-child(3) { background: rgb(160, 66, 3); }
+        .content-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .image-container img {
+            width: 100%;
+            max-width: 400px;
+            border-radius: 5px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+        }
     </style>
 </head>
 <body>
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">Legal Study Hub</a>
+            <a class="navbar-brand" href="#">
+                <img src="Lawyer-Legal-.jpg" alt="Legal Study Hub Logo"> Legal Study Hub
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link" href="#quiz">Quiz</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#games">Fun Games</a></li>
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="quiz.html">Quiz</a></li>
+                    <li class="nav-item"><a class="nav-link" href="game.html">Fun Games</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#courses">Courses</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
                     <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" href="#login">Login</a></li>
+                    <li class="nav-item"><a class="nav-link btn btn-primary text-white ms-2" href="#signup">Sign Up for Free</a></li>
                 </ul>
             </div>
         </div>
@@ -37,20 +85,28 @@
     <div class="container mt-4">
         <h1>Welcome to Legal Study Hub</h1>
         <p>Learn about law with interactive quizzes and fun games.</p>
+        <p>Legal research design is a fundamental element of scientific investigation in law and social sciences. A research design is a logic that links the collected data to the study’s initial questions. Research work should be designed to clarify the research questions and the methods of answering them. In Legal Studies, the study design includes the following units:</p>
+        
+        <ul>
+            <li>Guilt and Liability</li>
+            <li>Sanctions, Remedies and Rights</li>
+            <li>Rights and Justice</li>
+            <li>The People and the Law</li>
+        </ul>
+        
+        <div class="content-container">
+            <div class="box-container">
+                <a href="quiz.html" class="box ">QUIZ</a>
+                
+                <div class="box">LEARN</div>
+                
+                <a href="game.html" class="box ">FUN GAME</a>
 
-        <!-- Quiz Section -->
-        <section id="quiz">
-            <h2>Legal Quiz</h2>
-            <p>Test your legal knowledge!</p>
-            <button class="btn btn-primary" onclick="window.location.href='/quiz'">Start Quiz</button>
-        </section>
-
-        <!-- Game Section -->
-        <section id="games" class="mt-5">
-            <h2>Fun Game - Legal Word Search</h2>
-            <p>Enjoy a simple word search game with legal terms.</p>
-            <a href="game.html" class="btn btn-success">Play Now</a>
-        </section>
+            </div>
+            <div class="image-container">
+                <img src="1.png" alt="Legal Drafting Course">
+            </div>
+        </div>
     </div>
 
     <!-- Footer -->

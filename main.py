@@ -47,5 +47,11 @@ def check_answer():
 
     return jsonify({"result": result_text})
 
+@app.route("/match_questions")
+def get_match_questions():
+    with open("data/match_questions.json", "r") as file:
+        return jsonify(json.load(file))
+
+
 if __name__ == '__main__':
     app.run(debug=True)

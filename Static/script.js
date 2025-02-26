@@ -43,20 +43,20 @@ async function loadGame() {
             termDiv.innerText = item.term;
             termDiv.dataset.match = item.answer;
             termsContainer.appendChild(termDiv);
-            termElements[item.answer] = termDiv; // ✅ Store reference for hiding later
+            termElements[item.answer] = termDiv; //  Store reference for hiding later
 
             let answerDiv = document.createElement("div");
             answerDiv.classList.add("ball");
             answerDiv.innerText = shuffledAnswers[index].answer;
             answerDiv.dataset.answer = shuffledAnswers[index].answer;
             answersContainer.appendChild(answerDiv);
-            answerElements[shuffledAnswers[index].answer] = answerDiv; // ✅ Store reference
+            answerElements[shuffledAnswers[index].answer] = answerDiv; // Store reference
         });
 
         document.querySelectorAll(".section").forEach(term => {
             term.addEventListener("click", function () {
                 document.querySelectorAll(".section").forEach(t => t.classList.remove("selected"));
-                term.classList.add("selected");
+                this.classList.add("selected");
                 window.selectedTerm = this.dataset.match;
             });
         });
@@ -66,10 +66,10 @@ async function loadGame() {
                 if (!window.selectedTerm) return;
 
                 let ballRect = this.getBoundingClientRect();
-                let snakeX = window.innerWidth - 50;  // ✅ Start snake from right corner
+                let snakeX = window.innerWidth - 50;  //  Start snake from right corner
                 let snakeY = window.innerHeight - 50;
 
-                // ✅ Make snake visible and move it towards the selected ball
+                //  Make snake visible and move it towards the selected ball
                 snake.style.opacity = "1";
                 snake.style.left = `${snakeX}px`;
                 snake.style.top = `${snakeY}px`;
@@ -80,28 +80,28 @@ async function loadGame() {
                 }, 100);
 
                 if (this.dataset.answer === window.selectedTerm) {
-                    // ✅ Correct Match: Delay hiding the ball until the snake reaches it
+                    //  Correct Match: Delay hiding the ball until the snake reaches it
                     setTimeout(() => {
                         snake.classList.add("eat");
                         this.style.transform = "scale(1.2)";
                     }, 500);
 
                     setTimeout(() => {
-                        this.style.visibility = "hidden"; // ✅ Hide ball AFTER snake reaches it
-                        termElements[this.dataset.answer].style.visibility = "hidden"; // ✅ Hide matched term
+                        this.style.visibility = "hidden"; //  Hide ball AFTER snake reaches it
+                        termElements[this.dataset.answer].style.visibility = "hidden"; //  Hide matched term
                         scoreElement.textContent = parseInt(scoreElement.textContent) + 1;
                     }, 1000);
                 } else {
-                    // ❌ Wrong Match: Explosion animation
+                    //  Wrong Match: Explosion animation
                     setTimeout(() => {
                         this.classList.add("explode");
                         snake.classList.add("explode");
                     }, 500);
 
                     setTimeout(() => {
-                        this.style.visibility = "hidden"; // ✅ Delayed disappearance
+                        this.style.visibility = "hidden"; //  Delayed disappearance
                         termElements[this.dataset.answer].style.visibility = "hidden"; 
-                        snake.style.opacity = "0"; // ✅ Snake disappears
+                        snake.style.opacity = "0"; //  Snake disappears
                     }, 1000);
                 }
 

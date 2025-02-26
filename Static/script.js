@@ -29,11 +29,11 @@ async function loadGame() {
 
         let shuffledAnswers = [...data].sort(() => Math.random() - 0.5);
 
-        // ✅ Clear previous content to prevent overlapping
+        //  Clear previous content to prevent overlapping
         termsContainer.innerHTML = "";
         answersContainer.innerHTML = "";
 
-        // ✅ Create mapping for terms and answers
+        //  Create mapping for terms and answers
         let termElements = {};
         let answerElements = {};
 

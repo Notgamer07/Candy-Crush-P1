@@ -1,3 +1,5 @@
+let snakeShouldRespawn = false;  // ✅ Global variable to track snake respawn
+
 document.addEventListener("DOMContentLoaded", async () => {
     if (document.getElementById("quiz-container")) {
         await loadQuiz();
@@ -10,9 +12,8 @@ async function loadGame() {
     const termsContainer = document.getElementById("terms-container");
     const answersContainer = document.getElementById("answers-container");
     const scoreElement = document.getElementById("score");
-    const snake = document.getElementById("snake");
 
-    if (!termsContainer || !answersContainer || !scoreElement || !snake) {
+    if (!termsContainer || !answersContainer || !scoreElement) {
         console.error("Error: Game elements not found in the DOM.");
         return;
     }
@@ -29,11 +30,10 @@ async function loadGame() {
 
         let shuffledAnswers = [...data].sort(() => Math.random() - 0.5);
 
-        //  Clear previous content to prevent overlapping
+        // ✅ Clear previous content
         termsContainer.innerHTML = "";
         answersContainer.innerHTML = "";
 
-        //  Create mapping for terms and answers
         let termElements = {};
         let answerElements = {};
 
@@ -43,14 +43,14 @@ async function loadGame() {
             termDiv.innerText = item.term;
             termDiv.dataset.match = item.answer;
             termsContainer.appendChild(termDiv);
-            termElements[item.answer] = termDiv; //  Store reference for hiding later
+            termElements[item.answer] = termDiv;
 
             let answerDiv = document.createElement("div");
             answerDiv.classList.add("ball");
             answerDiv.innerText = shuffledAnswers[index].answer;
             answerDiv.dataset.answer = shuffledAnswers[index].answer;
             answersContainer.appendChild(answerDiv);
-            answerElements[shuffledAnswers[index].answer] = answerDiv; // Store reference
+            answerElements[shuffledAnswers[index].answer] = answerDiv;
         });
 
         document.querySelectorAll(".section").forEach(term => {
@@ -58,6 +58,13 @@ async function loadGame() {
                 document.querySelectorAll(".section").forEach(t => t.classList.remove("selected"));
                 this.classList.add("selected");
                 window.selectedTerm = this.dataset.match;
+
+                // ✅ If snake was removed, spawn a new one
+                if (snakeShouldRespawn) {
+                    console.log("Respawning new snake..."); // Debugging log
+                    spawnNewSnake();
+                    snakeShouldRespawn = false;
+                }
             });
         });
 
@@ -66,47 +73,71 @@ async function loadGame() {
                 if (!window.selectedTerm) return;
 
                 let ballRect = this.getBoundingClientRect();
-                let snakeX = window.innerWidth - 50;  //  Start snake from right corner
-                let snakeY = window.innerHeight - 50;
+                let snake = document.getElementById("snake");
 
-                //  Make snake visible and move it towards the selected ball
-                snake.style.opacity = "1";
-                snake.style.left = `${snakeX}px`;
-                snake.style.top = `${snakeY}px`;
-
-                setTimeout(() => {
-                    snake.style.left = `${ballRect.left}px`;
-                    snake.style.top = `${ballRect.top}px`;
-                }, 100);
-
-                if (this.dataset.answer === window.selectedTerm) {
-                    //  Correct Match: Delay hiding the ball until the snake reaches it
-                    setTimeout(() => {
-                        snake.classList.add("eat");
-                        this.style.transform = "scale(1.2)";
-                    }, 500);
-
-                    setTimeout(() => {
-                        this.style.visibility = "hidden"; //  Hide ball AFTER snake reaches it
-                        termElements[this.dataset.answer].style.visibility = "hidden"; //  Hide matched term
-                        scoreElement.textContent = parseInt(scoreElement.textContent) + 1;
-                    }, 1000);
-                } else {
-                    //  Wrong Match: Explosion animation
-                    setTimeout(() => {
-                        this.classList.add("explode");
-                        snake.classList.add("explode");
-                    }, 500);
-
-                    setTimeout(() => {
-                        this.style.visibility = "hidden"; //  Delayed disappearance
-                        termElements[this.dataset.answer].style.visibility = "hidden"; 
-                        snake.style.opacity = "0"; //  Snake disappears
-                    }, 1000);
+                if (!snake) {
+                    console.error("Snake not found!");
+                    return;
                 }
 
-                window.selectedTerm = null;
-                document.querySelectorAll(".section").forEach(term => term.classList.remove("selected"));
+                // ✅ Calculate time delay based on distance
+                let snakeRect = snake.getBoundingClientRect();
+                let distance = Math.sqrt(
+                    Math.pow(ballRect.left - snakeRect.left, 2) + Math.pow(ballRect.top - snakeRect.top, 2)
+                );
+                let timeDelay = Math.min(distance * 3, 1500);  // Dynamic delay (max 1.5s)
+
+                // ✅ Move snake towards the selected ball
+                snake.style.opacity = "1";
+                snake.style.left = `${ballRect.left}px`;
+                snake.style.top = `${ballRect.top}px`;
+
+                setTimeout(() => {
+                    if (this.dataset.answer === window.selectedTerm) {
+                        // ✅ Correct match animation
+                        snake.classList.add("eat");
+                        this.style.transform = "scale(1.2)";
+
+                        setTimeout(() => {
+                            this.style.visibility = "hidden";
+                            termElements[this.dataset.answer].style.visibility = "hidden";
+                            scoreElement.textContent = parseInt(scoreElement.textContent) + 1;
+                        }, 500);
+                    } else {
+                        // ❌ Wrong match: Explosion happens only when the snake is near
+                        setTimeout(() => {
+                            this.classList.add("explode");
+                            snake.classList.add("explode");
+
+                            // 💥 Explosion Emoji Effect
+                            let explosion = document.createElement("div");
+                            explosion.innerHTML = "💥";
+                            explosion.classList.add("explosion-emoji");
+
+                            explosion.style.left = `${ballRect.left + ballRect.width / 2}px`;
+                            explosion.style.top = `${ballRect.top + ballRect.height / 2}px`;
+
+                            document.body.appendChild(explosion);
+
+                            setTimeout(() => {
+                                explosion.remove();
+                            }, 500);
+                        }, timeDelay); // ✅ Explosion delayed until snake reaches the ball
+
+                        setTimeout(() => {
+                            this.style.visibility = "hidden";
+                            termElements[this.dataset.answer].style.visibility = "hidden";
+
+                            let oldSnake = document.getElementById("snake");
+                            if (oldSnake) oldSnake.remove(); // ✅ Remove the old snake
+
+                            snakeShouldRespawn = true; // ✅ New snake will spawn on next selection
+                        }, timeDelay + 500);
+                    }
+
+                    window.selectedTerm = null;
+                    document.querySelectorAll(".section").forEach(term => term.classList.remove("selected"));
+                }, timeDelay); // ✅ Delayed snake movement based on distance
             });
         });
 
@@ -114,4 +145,26 @@ async function loadGame() {
         console.error("Error loading match questions:", error);
         termsContainer.innerHTML = `<p class="error">Failed to load questions. Try again later.</p>`;
     }
+}
+
+// ✅ Function to spawn a new snake when needed
+function spawnNewSnake() {
+    // Remove any existing snake
+    let existingSnake = document.getElementById("snake");
+    if (existingSnake) {
+        existingSnake.remove();
+    }
+
+    // ✅ Create new snake
+    let newSnake = document.createElement("img");
+    newSnake.src = "/static/images/snake.png";
+    newSnake.id = "snake";  // ✅ Assign correct ID
+    newSnake.classList.add("snake");
+
+    // ✅ Ensure it starts from bottom-right
+    newSnake.style.position = "absolute";
+    newSnake.style.right = "10px";
+    newSnake.style.bottom = "10px";
+
+    document.body.appendChild(newSnake);
 }
